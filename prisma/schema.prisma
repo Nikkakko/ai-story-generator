@@ -14,3 +14,53 @@ datasource db {
   url  	    = env("DATABASE_URL")
   
 }
+
+
+
+enum StoryType {
+  ADVENTURE
+  FANTASY
+  EDUCATIONAL
+}
+
+enum AgeGroup {
+  THREE_TO_FIVE
+  SIX_TO_EIGHT
+  NINE_TO_TWELVE
+}
+
+enum ImageStyle {
+  CARTOON
+  WATERCOLOR
+  REALISTIC
+}
+
+model Story {
+  id          String   @id @default(cuid())
+  title       String
+  content     String
+  imageUrl    String?
+  storyType   StoryType
+  ageGroup    AgeGroup
+  imageStyle  ImageStyle
+  
+  //relationship
+  user        User @relation(fields: [userId], references: [id])
+  userId      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+
+
+
+model User {
+  id          String   @id @default(cuid())
+  name        String 
+  email       String
+  passwordHash    String @unique
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  deletedAt   DateTime?
+  stories     Story[]
+}
