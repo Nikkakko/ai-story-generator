@@ -48,18 +48,12 @@ const Login: React.FC<LoginProps> = ({ mode = "signin" }: LoginProps) => {
         const signInAction = await signIn(values);
         if ("error" in signInAction) {
           setError(signInAction.error);
-        } else {
-          // Redirect to the dashboard.
-          router.push("/dashboard");
         }
       } else {
         // Sign up.
         const signUpAction = await signUp(values);
         if ("error" in signUpAction) {
           setError(signUpAction.error);
-        } else {
-          // Redirect to the dashboard.
-          router.push("/dashboard");
         }
       }
     });

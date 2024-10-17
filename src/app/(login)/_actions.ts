@@ -3,9 +3,8 @@ import db from "@/lib/db/db";
 import { z } from "zod";
 import { cookies } from "next/headers";
 import { comparePasswords, hashPassword, setSession } from "@/lib/auth/session";
-import { getUser } from "@/lib/db/queries";
 import { authSchema } from "@/lib/validation";
-import { validatedAction } from "@/lib/auth/middleware";
+import { redirect } from "next/navigation";
 
 export const signIn = async (values: z.infer<typeof authSchema>) => {
   const validateValues = authSchema.safeParse(values);
@@ -15,11 +14,14 @@ export const signIn = async (values: z.infer<typeof authSchema>) => {
     };
   }
 
-  const user = await getUser();
+  const user = await db.user.findFirst({
+    where: {
+      email: validateValues.data.email,
+    },
+  });
+
   if (!user) {
-    return {
-      error: "Invalid credentials",
-    };
+    return { error: "Invalid credentials" };
   }
 
   const isPasswordValid = await comparePasswords(
@@ -33,7 +35,7 @@ export const signIn = async (values: z.infer<typeof authSchema>) => {
 
   await setSession(user);
 
-  return { success: "Signed in successfully" };
+  redirect("/dashboard");
 };
 
 // export const signIn = validatedAction(authSchema, async values => {
@@ -85,7 +87,7 @@ export const signUp = async (values: z.infer<typeof authSchema>) => {
 
   await setSession(user);
 
-  return { success: "Signed up successfully" };
+  redirect("/dashboard");
 };
 
 // export const signUp = validatedAction(authSchema, async values => {
@@ -113,8 +115,8 @@ export const signUp = async (values: z.infer<typeof authSchema>) => {
 //   return { success: "Signed up successfully" };
 // });
 
-// export const signOut = async () => {
-//   cookies().delete("session");
+export const signOut = async () => {
+  cookies().delete("session");
 
-//   return { success: "Signed out successfully" };
-// };
+  return { success: "Signed out successfully" };
+};

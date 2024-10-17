@@ -3,11 +3,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button, buttonVariants } from "./ui/button";
 import { cn } from "@/lib/utils";
+import SignOut from "./sign-out";
+import { getUser } from "@/lib/db/queries";
 
 interface HeaderProps {}
 
-const Header: React.FC<HeaderProps> = ({}) => {
-  //home,create story,explore story, contact us
+const Header: React.FC<HeaderProps> = async ({}) => {
+  const user = await getUser();
   const menuList = [
     {
       name: "Home",
@@ -48,17 +50,33 @@ const Header: React.FC<HeaderProps> = ({}) => {
             ))}
           </nav>
 
-          <Link
-            href="/dashboard"
-            className={cn(
-              buttonVariants({
-                variant: "default",
-                className: "bg-violet-600",
-              })
-            )}
-          >
-            Get Started
-          </Link>
+          {!user ? (
+            <Link
+              href="/sign-in"
+              className={cn(
+                buttonVariants({
+                  variant: "default",
+                })
+              )}
+            >
+              Get Started
+            </Link>
+          ) : (
+            <div className="flex items-center gap-2">
+              <Link
+                href="/dashboard"
+                className={cn(
+                  buttonVariants({
+                    variant: "default",
+                  })
+                )}
+              >
+                Dashboard
+              </Link>
+
+              <SignOut />
+            </div>
+          )}
         </div>
       </header>
     </>

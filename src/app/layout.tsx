@@ -26,8 +26,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${publicSans.className} antialiased  min-h-[100dvh]`}>
-        <Header />
-        <UserProvider userPromise={userPromise}>{children}</UserProvider>
+        <UserProvider userPromise={userPromise}>
+          <Header />
+          {children}
+        </UserProvider>
       </body>
     </html>
   );
