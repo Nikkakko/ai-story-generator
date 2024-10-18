@@ -1,10 +1,9 @@
 import * as React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Button, buttonVariants } from "./ui/button";
-import { cn } from "@/lib/utils";
-import SignOut from "./sign-out";
+
 import { getUser } from "@/lib/db/queries";
+import UserMenu from "./UserMenu";
 
 interface HeaderProps {}
 
@@ -50,33 +49,7 @@ const Header: React.FC<HeaderProps> = async ({}) => {
             ))}
           </nav>
 
-          {!user ? (
-            <Link
-              href="/sign-in"
-              className={cn(
-                buttonVariants({
-                  variant: "default",
-                })
-              )}
-            >
-              Get Started
-            </Link>
-          ) : (
-            <div className="flex items-center gap-2">
-              <Link
-                href="/dashboard"
-                className={cn(
-                  buttonVariants({
-                    variant: "default",
-                  })
-                )}
-              >
-                Dashboard
-              </Link>
-
-              <SignOut />
-            </div>
-          )}
+          <UserMenu />
         </div>
       </header>
     </>

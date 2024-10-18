@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Label } from "@/components/ui/label";
+
 import Link from "next/link";
 import { signIn, signUp } from "./_actions";
 
@@ -49,12 +49,16 @@ const Login: React.FC<LoginProps> = ({ mode = "signin" }: LoginProps) => {
         if ("error" in signInAction) {
           setError(signInAction.error);
         }
+
+        form.reset();
       } else {
         // Sign up.
         const signUpAction = await signUp(values);
         if ("error" in signUpAction) {
           setError(signUpAction.error);
         }
+
+        form.reset();
       }
     });
   }

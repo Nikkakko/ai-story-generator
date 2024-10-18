@@ -57,3 +57,12 @@ export async function setSession(user: User) {
     sameSite: "lax",
   });
 }
+
+export async function clearSession() {
+  cookies().set("session", "", {
+    expires: new Date(0),
+    httpOnly: true,
+    secure: true,
+    sameSite: "lax",
+  });
+}
