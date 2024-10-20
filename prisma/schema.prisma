@@ -18,31 +18,31 @@ datasource db {
 
 
 enum StoryType {
-  ADVENTURE
-  FANTASY
+  STORY_BOOK
+  BED_TIME_STORY
   EDUCATIONAL
 }
 
 enum AgeGroup {
+  ZERO_TO_TWO
   THREE_TO_FIVE
   SIX_TO_EIGHT
-  NINE_TO_TWELVE
 }
 
 enum ImageStyle {
   CARTOON
-  WATERCOLOR
-  REALISTIC
+  PAPER_CUT
+  WATER_COLOR
 }
 
 model Story {
   id          String   @id @default(cuid())
-  title       String
   content     String
   imageUrl    String?
   storyType   StoryType
   ageGroup    AgeGroup
   imageStyle  ImageStyle
+  slug        String  @unique
   
   //relationship
   user        User @relation(fields: [userId], references: [id])

@@ -17,9 +17,9 @@ const DashboardPage: React.FC<DashboardPageProps> = async ({}) => {
     return user.name || user.email || "Unknown User";
   };
   return (
-    <div>
+    <main className="container mx-auto py-20">
       <h1>Welcome back, {getUserDisplayName(user)}</h1>
-    </div>
+    </main>
   );
 };
 

@@ -35,3 +35,21 @@ export async function getUser() {
 
   return user[0];
 }
+
+export async function getStory(slug: string) {
+  try {
+    const story = await db.story.findUnique({
+      where: {
+        slug,
+      },
+      include: {
+        user: true,
+      },
+    });
+
+    return story;
+  } catch (error) {
+    console.error("Error getting story", error);
+    return null;
+  }
+}

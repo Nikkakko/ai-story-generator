@@ -1,32 +1,15 @@
 import * as React from "react";
 import Image from "next/image";
 import Link from "next/link";
-
 import { getUser } from "@/lib/db/queries";
 import UserMenu from "./UserMenu";
+import { menuList } from "@/siteData";
 
 interface HeaderProps {}
 
 const Header: React.FC<HeaderProps> = async ({}) => {
   const user = await getUser();
-  const menuList = [
-    {
-      name: "Home",
-      href: "/",
-    },
-    {
-      name: "Create Story",
-      href: "/create",
-    },
-    {
-      name: "Explore Story",
-      href: "/explore",
-    },
-    {
-      name: "Contact Us",
-      href: "/contact",
-    },
-  ];
+
   return (
     <>
       <header className="flex h-16 items-center container mx-auto ">
