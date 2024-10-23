@@ -58,11 +58,7 @@ const CreateStoryForm: React.FC<CreateStoryFormProps> = () => {
     });
   }
 
-  const isDisabled =
-    isPending ||
-    !form.formState.isValid ||
-    !form.formState.isDirty ||
-    form.formState.isSubmitting;
+  const isDisabled = isPending || form.formState.isSubmitting;
 
   type RadioGroupWithImagesProps = {
     options: storyTypeOptions[] | ageGroupOptions[] | imageStyleOptions[];

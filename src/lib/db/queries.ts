@@ -53,3 +53,17 @@ export async function getStory(slug: string) {
     return null;
   }
 }
+
+export async function getStories() {
+  try {
+    const stories = await db.story.findMany({
+      include: {
+        user: true,
+      },
+    });
+
+    return stories;
+  } catch (error) {
+    console.error("Error getting stories", error);
+  }
+}

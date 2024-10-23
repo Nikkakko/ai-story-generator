@@ -6,8 +6,11 @@ import * as z from "zod";
 import db from "@/lib/db/db";
 import { getUser } from "../db/queries";
 
+import { UTApi } from "uploadthing/server";
+
+const utapi = new UTApi();
+
 import { slugify } from "../utils";
-import { redirect } from "next/navigation";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -59,16 +62,10 @@ export async function generateStory(
     const chatResponse = completion.choices[0].message.content;
     const image_url = imageResponse.data[0].url;
 
-    if (!image_url) {
-      throw new Error("Failed to generate image");
-    }
-    const imageData = await fetch(image_url);
-    const image = await imageData.blob();
-    const imageBuffer = await image.arrayBuffer();
-    const imageBase64 = Buffer.from(imageBuffer).toString("base64");
-
-    if (!chatResponse || !image_url) {
-      throw new Error("Failed to generate story or image");
+    if (!image_url || !chatResponse) {
+      return {
+        error: "An error occurred while generating the story",
+      };
     }
 
     const storySlug = slugify(
@@ -77,11 +74,19 @@ export async function generateStory(
       }-${Date.now()}`
     );
 
+    const uploadedFile = await utapi.uploadFilesFromUrl(image_url);
+
+    if (!uploadedFile) {
+      return {
+        error: "An error occurred while uploading the image",
+      };
+    }
+
     await db.story.create({
       data: {
         content: chatResponse,
         userId: currentUser.id,
-        imageUrl: image_url,
+        imageUrl: uploadedFile.data?.url,
         ageGroup: validValues.data.ageGroup,
         storyType: validValues.data.storyType,
         imageStyle: validValues.data.imageStyle,
